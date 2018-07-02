@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WheelReductionDrive
 {
-    public class WheelReductionDrive : PartModule, IPartMassModifier
+    public class WheelReductionDrive : PartModule, IPartMassModifier, IPartCostModifier
     {
         /* Adjusting torque curve with simple reduction ratio 
          * Adjusting wheel stress tolerance in exchange of weight and EC consuming
@@ -180,6 +180,16 @@ namespace WheelReductionDrive
         }
 
         public ModifierChangeWhen GetModuleMassChangeWhen()
+        {
+            return ModifierChangeWhen.FIXED;
+        }
+
+        public float GetModuleCost(float defaultCost, ModifierStagingSituation sit)
+        {
+            return (reductorRatio == 1.0 ? 0 : defaultCost) + (enduranceMassModifier == 1.0 ? 0 : defaultCost);
+        }
+
+        public ModifierChangeWhen GetModuleCostChangeWhen()
         {
             return ModifierChangeWhen.FIXED;
         }
